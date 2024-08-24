@@ -91,11 +91,16 @@ void setup() {
   pinMode(PinOut, OUTPUT);
   val = 0;  
 
+
+  words[0]=13;
+  words[1]=18;
+  words[2]=24;
+  words[3]=23;
 }
 
 
 void loop() {
-
+t.update();
   byte thisState = digitalRead(PinIn);
   
 
@@ -113,10 +118,10 @@ void loop() {
 
   digitalWrite(PinOut, val);
   }
-
+  
   switch (a) {
     case 0:
-        t.update();
+        
         Vo = analogRead(ThermistorPin);
         R2 = R1* (1023.0 / Vo - 1.0); // Calculate NTC resistance Vout=Vin*(R2/(R1+R2)) -->R2=(Vout*R1)/(Vin-Vout)  --> R2 = R1* (1023.0 / Vout - 1.0)
         logR2 = log(R2);
@@ -128,6 +133,7 @@ void loop() {
         t.stop(timer_event);
         cathode_high();
         break_number(number);
+        Serial.println("case0");
         timer_event = t.every(1, display_number);
           if (number!=number1){
           number1=T;
@@ -135,19 +141,18 @@ void loop() {
         }
       break;
     case 1:
-      words[0]=13;
-      words[1]=18;
-      words[2]=24;
-      words[3]=23;
+      
       t.update();
+      Serial.println("case1");
       if (b==0){
         t.stop(timer_event);
         cathode_high();
-        
         timer_event = t.every(1, display_letters);
         b=1;
+      
       }
-        break;
+      a=2;
+      break;
   }
 
 /*
