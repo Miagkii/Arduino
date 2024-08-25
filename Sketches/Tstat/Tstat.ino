@@ -155,7 +155,7 @@ t.update();
       break;
   }
 
-/*
+
 
   t.update(); //timer update
   if (Serial.available()) { // read from serial
@@ -170,7 +170,7 @@ t.update();
     break_number(number);
     timer_event = t.every(5, display_number); // start timer again
    }
-  } */
+  } 
 }
 
 void break_number(long num) { // seperate the input number into 4 single digits
