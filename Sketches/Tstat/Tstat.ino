@@ -115,7 +115,6 @@ t.update();
   if (lastState == PUSHED && millis() - startMillis >= 2000UL) {
   val = 1;
   a=1;
-
   digitalWrite(PinOut, val);
   }
   
@@ -156,7 +155,7 @@ t.update();
   }
 
 
-
+/*
   t.update(); //timer update
   if (Serial.available()) { // read from serial
     t.stop(timer_event); //stop timer if anything to read
@@ -170,7 +169,7 @@ t.update();
     break_number(number);
     timer_event = t.every(5, display_number); // start timer again
    }
-  } 
+  } */
 }
 
 void break_number(long num) { // seperate the input number into 4 single digits
