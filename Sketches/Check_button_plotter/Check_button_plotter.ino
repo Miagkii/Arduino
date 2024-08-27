@@ -1,64 +1,57 @@
-const byte PUSHED = 0;
 
-unsigned long startMillis;
 const byte Setbutton = 2;
-const byte outled = 13;
-byte push;
-byte click = 0;
-byte lastState = 1;
-byte thisState = 1;
-bool clickKey = false;
+unsigned long startMillis, endMillis;
+bool setClick = false;
+bool setPush = false;
+bool startKey = false;
+bool endKey = false;
 bool pushKey = false;
-bool clickEnd = false;
-int b;
-
+byte setState = 1;
+byte a = 0;
 void setup() {
   Serial.begin(9600);
-  pinMode(outled, OUTPUT);
   pinMode(Setbutton, INPUT_PULLUP);
-  click = 0;
 }
 
 void loop() {
-  
-  click = 0;
-  push = 0;
-
-  thisState = digitalRead(Setbutton);
-  
-  if (thisState == PUSHED && lastState != thisState)
-  {
-    startMillis = millis();
-    b=1;
-    
+  setClick = false;
+  setPush = false;
+  setState = digitalRead(Setbutton);
+  if (startKey == false && setState == 0) {   // Start time press buttom
+    startMillis = millis();  
+    startKey = true;
+    endKey = false;
+    pushKey = true;
+    Serial.print("Start: ");
+    Serial.println(startMillis);
   }
-  
-  if (b == 1 && lastState == thisState) {
-    if ((millis()-startMillis)<3000) {
-      clickKey = true;
-    }
-    if ((millis()-startMillis)>3000) {
-      pushKey = true;
-
-    }
-    b = 0;
-  }
-
-  if (clickKey == true && (millis()-startMillis)>50){
-  
-    click = 1;
-    clickKey = false;
-    Serial.println("click");
-  }
-
-  
-  if (pushKey == true){
-  
-    push = 1;
+  if (startKey == true && setState == 1){   // End time press buttom
+    endMillis = millis();
+    endKey = true;
+    startKey = false;
     pushKey = false;
-    Serial.println("push");
+    Serial.print("End: ");
+    Serial.println(endMillis);
   }
-  
-  
+  if (endKey == true && (endMillis - startMillis)>50 && (endMillis - startMillis)<3000){    //Click button
+    setClick = true;
+    endKey = false;
+    Serial.print(endMillis);
+    Serial.print(" - ");
+    Serial.print(startMillis);
+    Serial.print(" = ");
+    Serial.println(endMillis - startMillis);
+    Serial.println("setClick");
+  } 
+  if (pushKey == true && (millis() - startMillis)>3000) {    //Push button more 3 sec
+    setPush = true;
+    pushKey = false;
+    Serial.print(endMillis);
+    Serial.print(" - ");
+    Serial.print(startMillis);
+    Serial.print(" = ");
+    Serial.println(millis() - startMillis);
+    Serial.println("setPush");
+  }
 
 }
