@@ -1,13 +1,14 @@
 
 const byte Setbutton = 2;
-unsigned long startMillis, endMillis;
+unsigned long startMillis, endMillis, exitMillis;
 bool setClick = false;
 bool setPush = false;
 bool startKey = false;
 bool endKey = false;
 bool pushKey = false;
+bool exitKey = false;
 byte setState = 1;
-byte a = 0;
+int a = 1;
 void setup() {
   Serial.begin(9600);
   pinMode(Setbutton, INPUT_PULLUP);
@@ -33,7 +34,7 @@ void loop() {
     Serial.print("End: ");
     Serial.println(endMillis);
   }
-  if (endKey == true && (endMillis - startMillis)>50 && (endMillis - startMillis)<3000){    //Click button
+  if (endKey == true && (endMillis - startMillis)>10 && (endMillis - startMillis)<3000){    //Click button
     setClick = true;
     endKey = false;
     Serial.print(endMillis);
@@ -53,5 +54,43 @@ void loop() {
     Serial.println(millis() - startMillis);
     Serial.println("setPush");
   }
+  
 
+
+  switch (a) {
+    case 1:
+      Serial.println("Temp");
+      if (setClick == true){
+        a = 2;
+      }
+      if (setPush == true){
+        a = 3;
+      }
+      break;
+    case 2:
+      Serial.println("set");
+      
+      exit();
+      
+      break;
+    case 3:
+      Serial.println("pass"); 
+      exit();
+  }
+
+
+}
+
+void exit() {
+  
+  if (exitKey == false || setClick == true || setPush == true) {
+    exitKey = true;
+    exitMillis = millis();
+  
+  }
+  if ((millis() - exitMillis)>5000){
+     a = 1;
+    exitKey = false;
+  }
+  
 }
