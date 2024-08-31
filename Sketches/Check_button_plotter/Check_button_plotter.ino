@@ -1,11 +1,14 @@
 #include <EEPROM.h>
-const byte Setbutton = 2;
+const byte setButton = 2;
+const byte defButton = 5;
+const byte downButton = 3;
+const byte upButton = 4;
 unsigned long exitMillis;
 bool exitKey = false;
 bool inputLevel = false;
 int listLevel = 1;
-int wayClick = 0;
-int wayPush = 0;
+int setClick = 0;
+int setPush = 0;
 
 struct buttons{
   unsigned long sMillis;
@@ -15,28 +18,49 @@ struct buttons{
   bool pushKey;
   bool click;
   bool push;
-} set, temp, function;
+} set, def, down, up, temp, function;
 
 void setup() {
   Serial.begin(9600);
-  pinMode(Setbutton, INPUT_PULLUP);
+  pinMode(setButton, INPUT_PULLUP);
+  pinMode(defButton, INPUT_PULLUP);
+  pinMode(downButton, INPUT_PULLUP);
+  pinMode(upButton, INPUT_PULLUP);
+
 }
 
 void loop() {
   set.click = false;
   set.push = false;
-  set.state = digitalRead(Setbutton);
+  def.click = false;
+  def.push = false;
+  down.click = false;
+  down.push = false;
+  up.click = false;
+  up.push = false;
+
+  set.state = digitalRead(setButton);
+  def.state = digitalRead(defButton);
+  down.state = digitalRead(downButton);
+  up.state = digitalRead(upButton);
+
   temp = set;
   set = stateCheck(temp);
-   
+  temp = def;
+  def = stateCheck(temp);
+  temp = down;
+  down = stateCheck(temp);
+  temp = up;
+  up = stateCheck(temp);
+
   if (inputLevel == false){
     switch (listLevel) {
       case 1:
         Serial.println("temp");
-        wayClick = 2;
-        wayPush = 3;
-        checkClick(wayClick);
-        checkPush(wayPush);
+        setClick = 2;
+        setPush = 3;
+        checkClick();
+        checkPush();
         break;
       case 2:
         Serial.println("set");
@@ -66,8 +90,7 @@ void exit() {
     exitMillis = millis();
   }
   if (inputLevel == true && set.click == true){
-    inputLevel = false;
-    
+    inputLevel = false;   
     exitKey = false;
   }
   
@@ -79,18 +102,16 @@ void exit() {
   
 }
 
-
-
-void checkClick(int c){
+void checkClick(){
   if (set.click == true){
-    listLevel = c; 
+    listLevel = setClick; 
   }
   set.click = false;
 }
 
-void checkPush(int p){
+void checkPush(){
   if (set.push == true){
-    listLevel = p; 
+    listLevel = setPush; 
   }
   set.push = false;
 }
@@ -132,7 +153,7 @@ buttons stateCheck(buttons function){
     function.click = true;
     function.endKey = false;
     Serial.println(function.sMillis);
-    Serial.println("seftClick");
+    Serial.println("Click");
     
   } 
   if (function.pushKey == true && (millis() - function.sMillis)>3000) {    // Check push button more 3 sec
@@ -140,7 +161,7 @@ buttons stateCheck(buttons function){
     function.pushKey = false;
     Serial.print("duration2: ");
     Serial.println(millis() - function.sMillis);
-    Serial.println("setPush");
+    Serial.println("Push");
   }
   return function;
 }
