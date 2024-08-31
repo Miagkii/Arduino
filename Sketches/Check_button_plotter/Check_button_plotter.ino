@@ -6,9 +6,11 @@ const byte upButton = 4;
 unsigned long exitMillis;
 bool exitKey = false;
 bool inputLevel = false;
+bool digitKey = false;
 int listLevel = 1;
 int setClick = 0;
 int setPush = 0;
+byte digits;
 
 struct buttons{
   unsigned long buttonMillis;
@@ -62,156 +64,223 @@ void loop() {
         checkPush();
         break;
       case 2:
-        exit();
+        startExitTime();
+        checkExitTime();
         break;
       case 3:
-        exit();
+        startExitTime();
+        checkExitTime();
         break;
       case 5:
-        exit();
+        startExitTime();
+        checkExitTime();
         break;
       case 6:
-        exit();
+        startExitTime();
+        checkExitTime();
         break;
       case 7:
-        exit();
+        startExitTime();
+        checkExitTime();
         break;
       case 8:
-        exit();
+        startExitTime();
+        checkExitTime();
         break;
       case 9:
+        startExitTime();
         Serial.println("set");
         checkInput();
-        exit();
+        checkExitTime();
         break;
       case 10:
+        startExitTime();
         Serial.println("pass"); 
-        exit();
+        checkExitTime();
         break;
       case 11:
         Serial.println("set");
-        exit();
+        startExitTime();
         updown();
         checkInput();
+        checkExitTime();
         break;
       case 12:
         Serial.println("hy");
-        exit();
+        startExitTime();
         updown();
         checkInput();
+        checkExitTime();
         break;
       case 13:
         Serial.println("ls");
-        exit();
+        startExitTime();
         updown();
         checkInput();
+        checkExitTime();
         break;
       case 14:
-        exit();
+        Serial.println("us");
+        startExitTime();
+        updown();
+        checkInput();
+        checkExitTime();
         break;
       case 15:
-        exit();
+        startExitTime();
+        checkExitTime();
         break;
       case 16:
-        exit();
+        startExitTime();
+        checkExitTime();
         break;
       case 17:
-        exit();
+        startExitTime();
+        checkExitTime();
         break;
       case 18:
-        exit();
+        startExitTime();
+        checkExitTime();
         break;
       case 19:
-        exit();
+        startExitTime();
+        checkExitTime();
         break;
       case 20:
-        exit();
+        startExitTime();
+        checkExitTime();
         break;
       case 21:
-        exit();
+        startExitTime();
+        checkExitTime();
         break;
       case 22:
-        exit();
+        startExitTime();
+        checkExitTime();
         break;
       case 23:
-        exit();
+        startExitTime();
+        checkExitTime();
         break;
       case 24:
-        exit();
+        startExitTime();
+        checkExitTime();
         break;
       case 25:
-        exit();
+        startExitTime();
+        checkExitTime();
         break;
       case 26:
-        exit();
+        startExitTime();
+        checkExitTime();
         break;
       case 27:
-        exit();
+        startExitTime();
+        checkExitTime();
         break;
       case 28:
-        exit();
+        startExitTime();
+        checkExitTime();
         break;
       case 29:
-        exit();
+        startExitTime();
+        checkExitTime();
         break;
       case 30:
-        exit();
+        startExitTime();
+        checkExitTime();
         break;
       case 31:
-        exit();
+        startExitTime();
+        checkExitTime();
         break;
       case 32:
-        exit();
+        startExitTime();
+        checkExitTime();
         break;
       case 33:
-        exit();
+        startExitTime();
+        checkExitTime();
         break;
       case 34:
-        exit();
+        startExitTime();
+        checkExitTime();
         break;
       case 35:
-        exit();
+        startExitTime();
+        checkExitTime();
         break;
       case 36:
-        exit();
+        startExitTime();
+        checkExitTime();
         break;
       case 37:
-        exit();
+        startExitTime();
+        checkExitTime();
         break;
       case 38:
-        exit();
+        startExitTime();
+        checkExitTime();
         break;
       case 39:
-        exit();
+        startExitTime();
+        checkExitTime();
         break;
 
     }
   }
   else {
-    inputDigits(listLevel);
+    startExitTime();
+    inputDigits();
+    inputExit();
+    checkExitTime();
   }
   
 
 }
 
-void exit() {
+void startExitTime(){
   if (exitKey == false || set.click == true || set.push == true || def.click == true || def.push == true|| down.click == true || down.push == true|| up.click == true || up.push == true) {
     exitKey = true;
     exitMillis = millis();
   }
-  if (inputLevel == true && set.click == true){
-    inputLevel = false;   
-    exitKey = false;
-  }
-  
+}
+void checkExitTime() {
   if ((millis() - exitMillis)>5000){
     inputLevel = false;
     listLevel = 1;
     exitKey = false;
+    digitKey = false;
+  } 
+}
+
+void inputDigits(){
+  if (digitKey == false){
+    digits = EEPROM.read(listLevel);
+    digitKey = true;
+  }
+  if (up.click == true && digits < 255) {
+    digits += 1;
+    up.click = false;
+  }
+  if (down.click == true && digits > 0) {
+    digits -= 1;
+    down.click = false;
+  }
+  Serial.println(digits);
+}
+
+void inputExit(){
+    if (inputLevel == true && set.click == true){
+    EEPROM.update(listLevel, digits);
+    inputLevel = false;   
+    exitKey = false;
+    digitKey = false;
+    Serial.print("Saved: ");
+    Serial.println(digits);
   }
   
 }
-
 void checkClick(){
   if (set.click == true){
     listLevel = setClick; 
@@ -233,13 +302,8 @@ void checkInput() {
   set.click = false;
 }
 
-void inputDigits(int address){
-  exit();
-  Serial.print("address ");
-  Serial.println(address);
-  Serial.print("data ");
-  Serial.println(EEPROM.read(address));
-}
+
+
 void updown(){
   if (listLevel > 10 && listLevel < 40) {
     if (up.click == true){
