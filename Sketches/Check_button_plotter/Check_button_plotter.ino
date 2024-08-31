@@ -13,6 +13,16 @@ int a = 1;
 int wayClick = 0;
 int wayPush = 0;
 
+struct sTime{
+  unsigned long sMillis;
+  byte state;
+  bool startK;
+  bool endK;
+  bool pushK;
+} set, t, f;
+
+
+
 void setup() {
   Serial.begin(9600);
   pinMode(Setbutton, INPUT_PULLUP);
@@ -21,9 +31,10 @@ void setup() {
 void loop() {
   setClick = false;
   setPush = false;
-  setState = digitalRead(Setbutton);
-
-  start(setState);
+  set.state = digitalRead(Setbutton);
+  t = set;
+  set = start(t);
+  
   /*
   if (startKey == false && setState == 0) {   // Start time press buttom
     startMillis = millis();  
@@ -43,35 +54,32 @@ void loop() {
     Serial.println(endMillis);
   }
   */
-  if (startKey == true && setState == 1){   // End time press buttom
-    startMillis = millis() - startMillis;
-    endKey = true;
-    startKey = false;
-    pushKey = false;
-    Serial.print("End: ");
-    Serial.println(startMillis);
+  if (set.startK == true && set.state == 1){   // End time press buttom
+    set.sMillis = millis() - set.sMillis;
+    set.endK = true;
+    set.startK = false;
+    set.pushK = false;
+    Serial.print("duration: ");
+    Serial.println(set.sMillis);
   }
-
-  if (endKey == true && startMillis>10 && startMillis<3000){    //Click button
+  
+  if (set.endK == true && set.sMillis>10 && set.sMillis<3000){    //Click button
     setClick = true;
-    endKey = false;
-    
-    Serial.println(startMillis);
+    set.endK = false;
+    Serial.println(set.sMillis);
     Serial.println("setClick");
     
   } 
-  if (pushKey == true && (millis() - startMillis)>3000) {    //Push button more 3 sec
+  if (set.pushK == true && (millis() - set.sMillis)>3000) {    //Push button more 3 sec
     setPush = true;
-    pushKey = false;
+    set.pushK = false;
    
-    Serial.print(" - ");
-    Serial.print(startMillis);
-    Serial.print(" = ");
-    Serial.println(millis() - startMillis);
+    Serial.print("duration: ");
+    Serial.println(millis() - set.sMillis);
     Serial.println("setPush");
   }
   
-  /*
+  
   if (b == false){
     switch (a) {
       case 1:
@@ -99,7 +107,7 @@ void loop() {
   else {
     inputDigits(a);
   }
-  */
+  
 
 }
 
@@ -153,6 +161,18 @@ void inputDigits(int address){
   exit();
 }
 
+sTime start(sTime f){
+  if (f.startK == false && f.state == 0){
+    f.sMillis = millis();
+    f.startK = true;
+    f.endK = false;
+    f.pushK = true;
+    Serial.print("Start: ");
+    Serial.println(f.sMillis);
+  }
+  return f;
+}
+/*
 void start(byte set){
 if (startKey == false && set == 0) {   // Start time press buttom
     startMillis = millis();  
@@ -162,4 +182,6 @@ if (startKey == false && set == 0) {   // Start time press buttom
     Serial.print("Start: ");
     Serial.println(startMillis);
   }
+  
 }
+*/
