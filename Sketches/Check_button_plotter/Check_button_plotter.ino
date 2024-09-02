@@ -128,70 +128,104 @@ void loop() {
         break;
       case 15:
         startExitTime();
+        Serial.println("ot");
+        updown();
         checkExitTime();
         break;
       case 16:
         startExitTime();
+        Serial.println("p2p");
+        updown();
         checkExitTime();
         break;
       case 17:
         startExitTime();
+        Serial.println("oe");
+        updown();
         checkExitTime();
         break;
       case 18:
         startExitTime();
+        Serial.println("p3p");
+        updown();
         checkExitTime();
         break;
       case 19:
         startExitTime();
+        Serial.println("o3");
+        updown();
         checkExitTime();
         break;
       case 20:
         startExitTime();
+        Serial.println("p4p");
+        updown();
         checkExitTime();
         break;
       case 21:
         startExitTime();
+        Serial.println("o4");
+        updown();
         checkExitTime();
         break;
       case 22:
         startExitTime();
+        Serial.println("ods");
+        updown();
         checkExitTime();
         break;
       case 23:
         startExitTime();
+        Serial.println("ac");
+        updown();
         checkExitTime();
         break;
       case 24:
         startExitTime();
+        Serial.println("cct");
+        updown();
         checkExitTime();
         break;
       case 25:
         startExitTime();
+        Serial.println("ccs");
+        updown();
         checkExitTime();
         break;
       case 26:
         startExitTime();
+        Serial.println("con");
+        updown();
         checkExitTime();
         break;
       case 27:
         startExitTime();
+        Serial.println("cof");
+        updown();
         checkExitTime();
         break;
       case 28:
         startExitTime();
+        Serial.println("cf");
+        updown();
         checkExitTime();
         break;
       case 29:
         startExitTime();
+        Serial.println("res");
+        updown();
         checkExitTime();
         break;
       case 30:
         startExitTime();
+        Serial.println("lod");
+        updown();
         checkExitTime();
         break;
       case 31:
         startExitTime();
+        Serial.println("red");
+        updown();
         checkExitTime();
         break;
       case 32:
