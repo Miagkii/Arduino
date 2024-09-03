@@ -229,37 +229,6 @@ void loop() {
         checkExitTime();
         break;
       case 32:
-        startExitTime();
-        checkExitTime();
-        break;
-      case 33:
-        startExitTime();
-        checkExitTime();
-        break;
-      case 34:
-        startExitTime();
-        checkExitTime();
-        break;
-      case 35:
-        startExitTime();
-        checkExitTime();
-        break;
-      case 36:
-        startExitTime();
-        checkExitTime();
-        break;
-      case 37:
-        startExitTime();
-        checkExitTime();
-        break;
-      case 38:
-        startExitTime();
-        checkExitTime();
-        break;
-      case 39:
-        startExitTime();
-        checkExitTime();
-        break;
 
     }
   }
