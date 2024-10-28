@@ -1,8 +1,4 @@
-/*
-  Created 2017
-  by AlexGyver
-  AlexGyver Home Labs Inc.
-*/
+
 
 byte n = 1;      // число лопастей
 float r = 3.5;   // радиус тела В САНТИМЕТРАХ
